@@ -99,3 +99,40 @@ export const updateWorkspaceById = async (id, updatedWorkspaceDetails) => {
     return null;
   }
 };
+
+export const updateFavoriteStatusService = async (id, isFavorite) => {
+  console.log("Updating favorite status for workspace with ID:", id);
+  try {
+    // Construct the URL for the specific workspace
+    const updateUrl = `${url}/${id}`;
+
+    // Prepare the updated workspace details object
+    const updatedWorkspaceDetails = {
+      isFavorite: isFavorite,
+    };
+
+    // Send a PUT request to update the workspace's favorite status
+    const res = await fetch(updateUrl, {
+      method: "PUT",
+      body: JSON.stringify(updatedWorkspaceDetails),
+      headers: header,
+    });
+
+    // Check if the request was successful
+    if (!res.ok) {
+      console.error(
+        "Error updating workspace favorite status:",
+        res.statusText
+      );
+      return null;
+    }
+
+    // Parse the response to JSON
+    const data = await res.json();
+    console.log("Workspace favorite status updated successfully:", data);
+    return data;
+  } catch (err) {
+    console.error("Error in updateFavoriteStatusService:", err);
+    return null;
+  }
+};

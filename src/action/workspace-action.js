@@ -1,5 +1,9 @@
 "use server";
-import { addWorkspace, deleteWorkspaceById, updateWorkspaceById } from "@/service/workspace.service";
+import {
+  addWorkspace,
+  deleteWorkspaceById,
+  updateWorkspaceById,
+} from "@/service/workspace.service";
 import { revalidateTag } from "next/cache";
 
 export const addWorkspaceAction = async (formData) => {
@@ -32,5 +36,21 @@ export const updateWorkspaceAction = async (formData) => {
     revalidateTag("workspace");
   } catch (e) {
     console.log("Error in updateWorkspaceAction:", e);
+  }
+};
+
+export const updateFavoriteStatusAction = async (formData) => {
+  console.log("Form data in update favorite status action:", formData);
+  const workspaceId = formData?.get("workspaceId");
+  const isFavorite = formData?.get("isFavorite") === "true"; // Assuming the form data sends "true" or "false" as a string
+
+  console.log("Workspace ID:", workspaceId, "Is Favorite:", isFavorite);
+
+  try {
+    await updateFavoriteStatusService(workspaceId, isFavorite);
+    revalidateTag("workspace");
+    console.log("Favorite status updated successfully");
+  } catch (e) {
+    console.log("Error in updateFavoriteStatusAction:", e);
   }
 };
